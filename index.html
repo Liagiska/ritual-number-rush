@@ -1,49 +1,301 @@
-<!DOCTYPE html><html><head><title>Ritual Number Rush</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>.ritual-gradient{background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%)}.btn-primary{background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%);color:white;font-weight:600;padding:.75rem 1rem;border-radius:.5rem}</style>
-</head><body class="bg-gray-900 text-white min-h-screen">
-<header class="ritual-gradient p-6 shadow-lg"><div class="container mx-auto flex justify-between items-center">
-<div class="flex items-center gap-3"><i class="fas fa-gamepad text-2xl"></i><h1 class="text-2xl font-bold">Ritual Number Rush</h1></div>
-<button onclick="showLB()" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition"><i class="fas fa-trophy mr-2"></i>Leaderboard</button></div></header>
-<main class="container mx-auto px-4 py-8"><div class="grid md:grid-cols-2 gap-8">
-<div class="space-y-6"><div id="setup" class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
-<h2 class="text-xl font-semibold mb-4 flex items-center gap-2"><i class="fas fa-sliders-h text-indigo-400"></i> Game Setup</h2>
-<form onsubmit="startGame(event)">
-<div class="grid grid-cols-2 gap-4 mb-4">
-<div><label class="block text-sm text-gray-400 mb-1">Max Number</label><input type="number" id="max" value="100" min="10" max="1000" class="w-full bg-gray-700 rounded-lg px-4 py-2"></div>
-<div><label class="block text-sm text-gray-400 mb-1">Max Attempts</label><input type="number" id="attempts" value="10" min="5" max="20" class="w-full bg-gray-700 rounded-lg px-4 py-2"></div></div>
-<button type="submit" class="w-full btn-primary"><i class="fas fa-play mr-2"></i>Start</button></form></div>
-<div id="game" class="hidden bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
-<h3 class="text-lg font-semibold mb-2 flex justify-between"><span>Guess!</span><span id="cnt">0/10</span></h3>
-<p class="text-gray-400 mb-4">1-<span id="rng">100</span></p>
-<form onsubmit="guessNum(event)">
-<div class="flex gap-2 mb-4"><input type="number" id="g" min="1" max="100" required class="flex-1 bg-gray-700 rounded-lg px-4 py-3 text-xl text-center"><button type="submit" class="btn-primary px-6"><i class="fas fa-paper-plane"></i></button></div></form>
-<div id="msg" class="text-center text-lg font-semibold mb-4"></div>
-<div id="hist" class="hidden"><h4 class="text-sm text-gray-400 mb-2">History</h4><div id="bubbles" class="flex flex-wrap gap-2"></div></div></div>
-<div id="score" class="hidden bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
-<h2 class="text-xl font-semibold mb-4 text-green-400"><i class="fas fa-trophy mr-2"></i>Done!</h2>
-<p class="text-3xl font-bold mb-4">Score: <span id="scr" class="text-yellow-400">0</span></p>
-<div class="flex gap-2 mb-4"><input type="text" id="nm" placeholder="Name" required class="flex-1 bg-gray-700 rounded-lg px-4 py-2"><button onclick="save()" class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-lg font-semibold"><i class="fas fa-save mr-2"></i>Save</button></div>
-<button onclick="tweet()" class="mt-2 w-full bg-blue-600 hover:bg-blue-700 py-2 rounded-lg transition"><i class="fab fa-twitter mr-2"></i>Tweet</button></div></div>
-<div id="lb" class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700 h-fit hidden">
-<h2 class="text-xl font-semibold mb-4"><i class="fas fa-crown text-yellow-400 mr-2"></i>Top 10</h2>
-<div id="lbtable"></div></div></div></main>
-<div id="modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-<div class="bg-gray-800 rounded-xl p-6 max-w-md w-full border border-gray-700"><div class="flex justify-between items-center mb-4"><h2 class="text-xl font-bold"><i class="fas fa-trophy text-yellow-400 mr-2"></i>Leaderboard</h2><button onclick="hideModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button></div><div id="modallb"></div></div></div>
-<footer class="text-center py-8 text-gray-500 text-sm"><p>Hermes x tutubear • Ritual Testnet</p></footer>
-<script>
-let game=null,K='rnr_';
-function $(i){return document.getElementById(i)}function s(i){$(i).classList.remove('hidden')}function h(i){$(i).classList.add('hidden')}
-function getL(){return JSON.parse(localStorage.getItem(K+'lb')||'[]')}function saveL(l){localStorage.setItem(K+'lb',JSON.stringify(l))}
-function add(n,sc,mn,ma){const l=getL();l.push({n,sc,mn,ma,d:new Date().toISOString()});l.sort((a,b)=>b.sc-a.sc||a.ma-b.ma);saveL(l.slice(0,100))}
-class G{constructor(m,at){this.t=Math.floor(Math.random()*m)+1;this.a=0;this.at=at;this.m=m;this.g=[]}g(n){this.a++;this.g.push(n);if(n===this.t){const s=Math.max(0,100-this.a*10);return{r:'correct',s,o:!0}}if(this.a>=this.at){return{r:'fail',s:0,o:!0}}return{r:n<this.t?'higher':'lower',o:!1}}}
-function startGame(e){e.preventDefault();const m=parseInt($('max').value),at=parseInt($('attempts').value);game=new G(m,at);h('score');h('setup');s('game');$('rng').textContent=m;$('cnt').textContent='0/'+at;$('g').max=m;$('msg').textContent='';h('hist');$('bubbles').innerHTML=''}
-function guessNum(e){e.preventDefault();if(!game)return;const n=parseInt($('g').value);if(isNaN(n)||n<1||n>game.m){alert('1-'+game.m);return;}const r=game.g(n);$('cnt').textContent=game.a+'/'+game.at;const b=document.createElement('span');b.className='px-3 py-1 rounded-full text-sm font-semibold '+(r.r==='correct'?'bg-green-600':r.r==='higher'?'bg-blue-600':'bg-red-600');b.textContent=n;$('bubbles').appendChild(b);s('hist');if(r.o){$('msg').innerHTML=r.r==='correct'?'<span class="text-green-400 text-xl">🎉 Correct!</span>':'<span class="text-red-400 text-xl">💥 '+game.t+'</span>';$('scr').textContent=r.s;if(r.s>0){setTimeout(()=>{h('game');s('score');},1500)}else setTimeout(()=>{h('game');s('setup');game=null;},3000)}else $('msg').innerHTML='<span class="text-'+(r.r==='higher'?'blue':'red')+'-400 text-lg">'+(r.r==='higher'?'📈 Higher!':'📉 Lower!')+'</span>';$('g').value=''}
-function save(){const n=$('nm').value.trim();if(!n){alert('Name');return;}add(n,parseInt($('scr').textContent),parseInt($('max').value),parseInt($('attempts').value));alert('Saved!');h('score');s('setup');game=null;renderL()}
-function tweet(){const s=$('scr').textContent;window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent('I scored '+s+' in Ritual Number Rush! 🎮'),'_blank')}
-function renderL(l=10){const lb=getL().slice(0,l);let h='';if(lb.length===0){h='<p class="text-center text-gray-400 py-8">No scores yet</p>';}else{h='<div class="space-y-2">';lb.forEach((e,i)=>{const em=i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'.';h+=`<div class="flex justify-between items-center bg-gray-700/50 p-3 rounded-lg"><span class="font-semibold">${em} ${e.n}</span><span class="text-yellow-400 font-bold">${e.sc} pts</span></div>`;});h+='</div>';}$('lbtable').innerHTML=h;$('modallb').innerHTML=h}
-function showLB(){renderL();s('modal')}function hideModal(){h('modal')}
-document.addEventListener('DOMContentLoaded',()=>{renderL()});$('modal').addEventListener('click',e=>{if(e.target.id==='modal')hideModal()});
-</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ritual Number Rush</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .ritual-gradient { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); }
+        .btn-primary { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; font-weight: 600; padding: 0.75rem 1rem; border-radius: 0.5rem; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <header class="ritual-gradient p-6 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-gamepad text-2xl"></i>
+                <h1 class="text-2xl font-bold">Ritual Number Rush</h1>
+            </div>
+            <button onclick="showLeaderboard()" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition">
+                <i class="fas fa-trophy mr-2"></i>Leaderboard
+            </button>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Game Panel -->
+            <div class="space-y-6">
+                <div id="setup-panel" class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                        <i class="fas fa-sliders-h text-indigo-400"></i> Game Setup
+                    </h2>
+                    <form onsubmit="startGame(event)">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Max Number</label>
+                                <input type="number" id="max-number" value="100" min="10" max="1000"
+                                       class="w-full bg-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 mb-1">Max Attempts</label>
+                                <input type="number" id="max-attempts" value="10" min="5" max="20"
+                                       class="w-full bg-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full btn-primary">
+                            <i class="fas fa-play mr-2"></i>Start New Game
+                        </button>
+                    </form>
+                </div>
+
+                <div id="game-panel" class="hidden bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+                    <h3 class="text-lg font-semibold mb-2 flex justify-between">
+                        <span>Guess a number!</span>
+                        <span class="text-indigo-400" id="attempts-counter">0/10</span>
+                    </h3>
+                    <p class="text-gray-400 mb-4">Between 1 and <span id="range-display">100</span></p>
+                    <form onsubmit="makeGuess(event)">
+                        <div class="flex gap-2 mb-4">
+                            <input type="number" id="guess-input" min="1" max="100" required
+                                   class="flex-1 bg-gray-700 rounded-lg px-4 py-3 text-xl text-center focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                                   placeholder="Enter your guess">
+                            <button type="submit" class="btn-primary px-6">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <div id="game-message" class="text-center text-lg font-semibold mb-4"></div>
+                    <div id="guess-history" class="hidden">
+                        <h4 class="text-sm text-gray-400 mb-2">Previous guesses</h4>
+                        <div id="history-bubbles" class="flex flex-wrap gap-2"></div>
+                    </div>
+                </div>
+
+                <div id="score-panel" class="hidden bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+                    <h2 class="text-xl font-semibold mb-4 text-green-400">
+                        <i class="fas fa-trophy mr-2"></i>Game Complete!
+                    </h2>
+                    <p class="text-3xl font-bold mb-4">Score: <span id="final-score" class="text-yellow-400">0</span></p>
+                    <div class="flex gap-2 mb-4">
+                        <input type="text" id="player-name" placeholder="Your name" required
+                               class="flex-1 bg-gray-700 rounded-lg px-4 py-2 focus:ring-2 focus:ring-green-500 focus:outline-none">
+                        <button onclick="saveScore()" class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded-lg font-semibold transition">
+                            <i class="fas fa-save mr-2"></i>Save
+                        </button>
+                    </div>
+                    <button onclick="shareScore()" class="mt-2 w-full bg-blue-600 hover:bg-blue-700 py-2 rounded-lg transition">
+                        <i class="fab fa-twitter mr-2"></i>Share on Twitter
+                    </button>
+                </div>
+            </div>
+
+            <div id="leaderboard-section" class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700 h-fit">
+                <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                    <i class="fas fa-crown text-yellow-400"></i> Leaderboard
+                </h2>
+                <div id="leaderboard-table"></div>
+            </div>
+        </div>
+    </main>
+
+    <div id="leaderboard-modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-xl p-6 max-w-md w-full border border-gray-700">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold"><i class="fas fa-trophy text-yellow-400 mr-2"></i>Leaderboard</h2>
+                <button onclick="hideLeaderboard()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <div id="modal-leaderboard"></div>
+        </div>
+    </div>
+
+    <footer class="text-center py-8 text-gray-500 text-sm">
+        <p>Built for Ritual Testnet • Made with <i class="fas fa-heart text-red-500"></i> by Hermes & tutubear</p>
+    </footer>
+
+    <script>
+        // Game state
+        let currentGame = null;
+        const STORAGE_KEY = 'ritual_number_rush_leaderboard';
+
+        // Utilities
+        function $(id) { return document.getElementById(id); }
+        function show(id) { $(id).classList.remove('hidden'); }
+        function hide(id) { $(id).classList.add('hidden'); }
+
+        // Leaderboard functions
+        function getLeaderboard() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        }
+
+        function saveLeaderboard(lb) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(lb));
+        }
+
+        function addScore(name, score, maxNumber, maxAttempts) {
+            const lb = getLeaderboard();
+            lb.push({ name, score, maxNumber, maxAttempts, date: new Date().toISOString() });
+            lb.sort((a, b) => b.score - a.score || a.maxAttempts - b.maxAttempts);
+            saveLeaderboard(lb.slice(0, 100));
+        }
+
+        function renderLeaderboard(limit = 10) {
+            const lb = getLeaderboard().slice(0, limit);
+            let html = '';
+            if (lb.length === 0) {
+                html = '<p class="text-center text-gray-400 py-8">No scores yet. Be the first!</p>';
+            } else {
+                html = '<div class="space-y-2">';
+                lb.forEach((entry, i) => {
+                    const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1) + '.';
+                    html += `
+                        <div class="flex justify-between items-center bg-gray-700/50 p-3 rounded-lg">
+                            <span class="font-semibold">${medal} ${entry.name}</span>
+                            <span class="text-yellow-400 font-bold">${entry.score} pts</span>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+            }
+            $('leaderboard-table').innerHTML = html;
+            $('modal-leaderboard').innerHTML = html;
+        }
+
+        function showLeaderboard() {
+            renderLeaderboard();
+            show('leaderboard-modal');
+        }
+
+        function hideLeaderboard() {
+            hide('leaderboard-modal');
+        }
+
+        // Game logic
+        class GameSession {
+            constructor(maxNumber, maxAttempts) {
+                this.target = Math.floor(Math.random() * maxNumber) + 1;
+                this.attempts = 0;
+                this.maxAttempts = maxAttempts;
+                this.maxNumber = maxNumber;
+                this.guesses = [];
+            }
+
+            guess(num) {
+                this.attempts++;
+                this.guesses.push(num);
+                if (num === this.target) {
+                    const score = Math.max(0, 100 - (this.attempts * 10));
+                    return { result: 'correct', score, gameOver: true };
+                } else if (this.attempts >= this.maxAttempts) {
+                    return { result: 'fail', score: 0, gameOver: true };
+                } else {
+                    return { result: num < this.target ? 'higher' : 'lower', gameOver: false };
+                }
+            }
+        }
+
+        // Event handlers
+        function startGame(event) {
+            event.preventDefault();
+            const maxNum = parseInt($('max-number').value);
+            const maxAtt = parseInt($('max-attempts').value);
+            currentGame = new GameSession(maxNum, maxAtt);
+
+            hide('score-panel');
+            hide('setup-panel');
+            show('game-panel');
+
+            $('range-display').textContent = maxNum;
+            $('attempts-counter').textContent = `0/${maxAtt}`;
+            $('guess-input').max = maxNum;
+            $('guess-input').value = '';
+            $('game-message').textContent = '';
+            hide('guess-history');
+            $('history-bubbles').innerHTML = '';
+        }
+
+        function makeGuess(event) {
+            event.preventDefault();
+            if (!currentGame) return;
+
+            const guess = parseInt($('guess-input').value);
+            if (isNaN(guess) || guess < 1 || guess > currentGame.maxNumber) {
+                alert(`Enter a number between 1 and ${currentGame.maxNumber}`);
+                return;
+            }
+
+            const result = currentGame.guess(guess);
+            $('attempts-counter').textContent = `${currentGame.attempts}/${currentGame.maxAttempts}`;
+
+            // Add to history bubble
+            const bubble = document.createElement('span');
+            bubble.className = 'px-3 py-1 rounded-full text-sm font-semibold ' +
+                (result.result === 'correct' ? 'bg-green-600' :
+                 result.result === 'higher' ? 'bg-blue-600' : 'bg-red-600');
+            bubble.textContent = guess;
+            $('history-bubbles').appendChild(bubble);
+            show('guess-history');
+
+            if (result.gameOver) {
+                if (result.result === 'correct') {
+                    $('game-message').innerHTML = '<span class="text-green-400 text-xl">🎉 Correct! The number was ' + currentGame.target + '</span>';
+                } else {
+                    $('game-message').innerHTML = '<span class="text-red-400 text-xl">💥 Game Over! The number was ' + currentGame.target + '</span>';
+                }
+                $('final-score').textContent = result.score;
+
+                if (result.score > 0) {
+                    setTimeout(() => {
+                        hide('game-panel');
+                        show('score-panel');
+                    }, 1500);
+                } else {
+                    setTimeout(() => {
+                        hide('game-panel');
+                        show('setup-panel');
+                        currentGame = null;
+                    }, 3000);
+                }
+            } else {
+                const color = result.result === 'higher' ? 'blue' : 'red';
+                const icon = result.result === 'higher' ? '📈 Higher!' : '📉 Lower!';
+                $('game-message').innerHTML = `<span class="text-${color}-400 text-lg">${icon}</span>`;
+            }
+            $('guess-input').value = '';
+        }
+
+        function saveScore() {
+            const name = $('player-name').value.trim();
+            if (!name) {
+                alert('Please enter your name');
+                return;
+            }
+            const score = parseInt($('final-score').textContent);
+            const maxNum = parseInt($('max-number').value);
+            const maxAtt = parseInt($('max-attempts').value);
+            addScore(name, score, maxNum, maxAtt);
+            alert('Score saved to leaderboard!');
+            hide('score-panel');
+            show('setup-panel');
+            currentGame = null;
+            renderLeaderboard();
+        }
+
+        function shareScore() {
+            const score = $('final-score').textContent;
+            const text = `I scored ${score} points in Ritual Number Rush! Can you beat me? 🎮`;
+            window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
+        }
+
+        // Close modal on outside click
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLeaderboard();
+            document.getElementById('leaderboard-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'leaderboard-modal') hideLeaderboard();
+            });
+        });
+    </script>
+</body>
+</html>
