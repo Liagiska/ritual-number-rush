@@ -7,25 +7,29 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .ritual-gradient {{ background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); }}
-        .btn-primary {{ background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; font-weight: 600; padding: 0.75rem 1rem; border-radius: 0.5rem; }}
-        .siggy-avatar {{ width: 64px; height: 64px; border-radius: 50%; border: 3px solid #a78bfa; object-fit: cover; box-shadow: 0 0 15px rgba(139, 92, 246, 0.3); }}
-        .siggy-sidebar {{ width: 100px; height: 100px; border-radius: 50%; border: 4px solid #8b5cf6; object-fit: cover; margin: 0 auto; display: block; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }}
-        @keyframes wave {{ 0%, 100% {{ transform: rotate(0deg); }} 25% {{ transform: rotate(15deg); }} 75% {{ transform: rotate(-15deg); }} }}
-        .siggy-wave {{ animation: wave 0.8s ease-in-out; }}
-        @keyframes bounce {{ 0%, 100% {{ transform: translateY(0); }} 50% {{ transform: translateY(-5px); }} }}
-        .siggy-bounce {{ animation: bounce 0.5s ease-in-out; }}
-        .siggy-glow:hover {{ filter: brightness(1.2) drop-shadow(0 0 8px #8b5cf6); }}
+        .ritual-gradient { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); }
+        .btn-primary { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; font-weight: 600; padding: 0.75rem 1rem; border-radius: 0.5rem; }
+         .ritual-logo-small {
+    width: 32px; height: 32px; vertical-align: middle;
+    filter: drop-shadow(0 0 3px #8b5cf6); margin-right: 8px;
+  }
+  .siggy-avatar { width: 64px; height: 64px; border-radius: 50%; border: 3px solid #a78bfa; object-fit: cover; box-shadow: 0 0 15px rgba(139, 92, 246, 0.3); }
+        .siggy-sidebar { width: 100px; height: 100px; border-radius: 50%; border: 4px solid #8b5cf6; object-fit: cover; margin: 0 auto; display: block; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
+        @keyframes wave { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(15deg); } 75% { transform: rotate(-15deg); } }
+        .siggy-wave { animation: wave 0.8s ease-in-out; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        .siggy-bounce { animation: bounce 0.5s ease-in-out; }
+        .siggy-glow:hover { filter: brightness(1.2) drop-shadow(0 0 8px #8b5cf6); }
     </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <!-- Siggy Lose Notification Modal -->
     <div id="siggy-notification" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4">
         <div class="bg-gray-800 rounded-2xl p-8 max-w-sm w-full border-2 border-red-500 shadow-2xl text-center">
-            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNmZmYwMDAiLz4KICA8IS0tIENhdCBib3R0b20gKGMuY2hhcnQpIC0tPgogIDxoMSBmaWxsPSIjZmZmMDAwIi8+CiAgPGNpcmNsZSBjeD0iODAiIGN5PSI4MCIgcj0iNDAiIGZpbGw9IiMwMDAwMDAiLz4KICA8IS0tIEVhcnJ5IC0tPgogIDxwb2x5Z29uIHBvaW50cz0iNjUsMzUgNTUsMTAgODAsMzUiIGZpbGw9IiMwMDAwMDAiLz4KICA8cG9seWdvbiBwb2ludHM9IjEzNSwzNSAxNDUsMTAgMTIwLDM1IiBmaWxsPSIjMDAwMDAwIi8+CiAgPHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB4PSI4MCIgeT0iMzAiIGZpbGw9IiJmYmYyNCIvPgogIDxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgeD0iMTIwIiB5PSIzMCIgZmlsbD0iI2ZiYjI0Ii8+CiAgPGNpcmNsZSBjeD0iMTAwIiBjeT0iNzUiIHI9IjUiIGZpbGw9IiMwMDAwMDAiLz4KICA8IS0tIE5vc2UgLS0+CiAgPHBhdGggZD0iTTkwIDgyIFEoMDAgOTAgMTAwIDgyIiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPgogIDwhLS0gU3VibWl0IG9uIGhlcmRfZm9yd2FyZCAoZ3JheSBzaW1wbGUgZGV2aWNlKSAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDAsMzUpIHNlY3RvLzguMCI+CiAgPHJlY3QgeD0iMTIuNSIgeT0iMTIuNSIgd2lkdGg9IjI1IiBoZWlnaHQ9IjI1IiBmaWxsPSIjOWNhM2FmIi8+CiAgPHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIGZpbGw9IiM5Y2EzYWYiLz4KICA8L2c+CiAgPCEtLSBHcmVlbiB0YW5rIG1hcmstLS0+CiAgPHBhdGggZD0iTTYwIDE0MCBRIDEwMCAxMzAgMTQwIDE0MCIgZmlsbD0iIzEwYjk4MSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8IS0tIEJsdWUgZWxlY3Ryb25pYyBqYWNrZXQgLS0+CiAgPHBhdGggZD0iTTM1IDEzMCBRIDMwIDE2MCA0MCAyMDAgTCAxMDAgMjAwIFEgMTI1IDE2MCAxMzUgMTMwIiBmaWxsPSIjM2I4MmY2IiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIwLjk1Ii8+CiAgPHBhdGggZD0iTTE1NSAxMzAgUSAxNzAgMTYwIDE2MCAyMDAgTCAxMzAgMjAwIFExMjUgMTYwIDEwNSAxMzAiIGZpbGw9IiMzYjgyZjYiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9IjAuOTUiLz4KICA8cGF0aCBkPSJNMTU1IDEzMCBRIDE1NSAxMzAgMTgwIDE4MCIgZmlsbD0iIzAwMCIvPgogIDxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSIxNSIgZmlsbD0iIzAwMCIgb3BhY2l0eT0iMC41Ii8+CiAgPCEtLSBQaW5rIHBhd3MgLS0+CiAgPGVsbGlwc2UgY3g9IjE0MCIgY3k9IjE4MCIgcng9IjEyIiByeT0iOCIgaGVpZ2h0PSI1IiBmaWxsPSIjZmJiZjI0IiBvcGFjaXR5PSIwLjgiLz4KICA8IS0tIFdoaXNrZXJzIC0tPgogIDxsaW5lIHgxPSI3MCIgeTE9Ijc1IiB4Mj0iNjAiIHkyPSI5MCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEiLz4KICA8bGluZSB4MT0iNzAiIHkxPSI4MCIgeDI9IjYwIiB5Mj0iODAiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgPGxpbmUgeDE9IjEzMCIgeTE9Ijc1IiB4Mj0iMTYwIiB5Mj0iOSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEiLz4KICA8bGluZSB4MT0iMTMwIiB5MT0iODAiIHgyPSIxNjAiIHkyPSI4MCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEiLz4KPC9zdmc+" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-red-500 siggy-bounce" alt="Siggy">
-            <h2 class="text-2xl font-bold text-red-400 mb-2">Kalah!</h2>
-            <p class="text-gray-300 mb-4">Siggy menyesal... Number was <span id="lose-number" class="text-yellow-400 font-bold"></span></p>
-            <p class="text-sm text-gray-400 mb-4">"Coba lagi, bos! Aku percaya kamu!"</p>
+            <img src="assets/siggy.svg" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-red-500 siggy-bounce" alt="Siggy">
+            <h2 class="text-2xl font-bold text-red-400 mb-2">Game Over!</h2>
+            <p class="text-gray-300 mb-4">Siggy is sorry... Number was <span id="lose-number" class="text-yellow-400 font-bold"></span></p>
+            <p class="text-sm text-gray-400 mb-4">"Try again, bro! I believe in you!"</p>
             <button onclick="closeLoseNotification()" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-lg font-semibold">
                 Try Again
             </button>
@@ -36,7 +40,7 @@
     <header class="ritual-gradient p-4 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNmZmYwMDAiLz4KICA8IS0tIENhdCBib3R0b20gKGMuY2hhcnQpIC0tPgogIDxoMSBmaWxsPSIjZmZmMDAwIi8+CiAgPGNpcmNsZSBjeD0iODAiIGN5PSI4MCIgcj0iNDAiIGZpbGw9IiMwMDAwMDAiLz4KICA8IS0tIEVhcnJ5IC0tPgogIDxwb2x5Z29uIHBvaW50cz0iNjUsMzUgNTUsMTAgODAsMzUiIGZpbGw9IiMwMDAwMDAiLz4KICA8cG9seWdvbiBwb2ludHM9IjEzNSwzNSAxNDUsMTAgMTIwLDM1IiBmaWxsPSIjMDAwMDAwIi8+CiAgPHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB4PSI4MCIgeT0iMzAiIGZpbGw9IiJmYmYyNCIvPgogIDxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgeD0iMTIwIiB5PSIzMCIgZmlsbD0iI2ZiYjI0Ii8+CiAgPGNpcmNsZSBjeD0iMTAwIiBjeT0iNzUiIHI9IjUiIGZpbGw9IiMwMDAwMDAiLz4KICA8IS0tIE5vc2UgLS0+CiAgPHBhdGggZD0iTTkwIDgyIFEoMDAgOTAgMTAwIDgyIiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPgogIDwhLS0gU3VibWl0IG9uIGhlcmRfZm9yd2FyZCAoZ3JheSBzaW1wbGUgZGV2aWNlKSAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDAsMzUpIHNlY3RvLzguMCI+CiAgPHJlY3QgeD0iMTIuNSIgeT0iMTIuNSIgd2lkdGg9IjI1IiBoZWlnaHQ9IjI1IiBmaWxsPSIjOWNhM2FmIi8+CiAgPHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIGZpbGw9IiM5Y2EzYWYiLz4KICA8L2c+CiAgPCEtLSBHcmVlbiB0YW5rIG1hcmstLS0+CiAgPHBhdGggZD0iTTYwIDE0MCBRIDEwMCAxMzAgMTQwIDE0MCIgZmlsbD0iIzEwYjk4MSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8IS0tIEJsdWUgZWxlY3Ryb25pYyBqYWNrZXQgLS0+CiAgPHBhdGggZD0iTTM1IDEzMCBRIDMwIDE2MCA0MCAyMDAgTCAxMDAgMjAwIFEgMTI1IDE2MCAxMzUgMTMwIiBmaWxsPSIjM2I4MmY2IiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIwLjk1Ii8+CiAgPHBhdGggZD0iTTE1NSAxMzAgUSAxNzAgMTYwIDE2MCAyMDAgTCAxMzAgMjAwIFExMjUgMTYwIDEwNSAxMzAiIGZpbGw9IiMzYjgyZjYiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9IjAuOTUiLz4KICA8cGF0aCBkPSJNMTU1IDEzMCBRIDE1NSAxMzAgMTgwIDE4MCIgZmlsbD0iIzAwMCIvPgogIDxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSIxNSIgZmlsbD0iIzAwMCIgb3BhY2l0eT0iMC41Ii8+CiAgPCEtLSBQaW5rIHBhd3MgLS0+CiAgPGVsbGlwc2UgY3g9IjE0MCIgY3k9IjE4MCIgcng9IjEyIiByeT0iOCIgaGVpZ2h0PSI1IiBmaWxsPSIjZmJiZjI0IiBvcGFjaXR5PSIwLjgiLz4KICA8IS0tIFdoaXNrZXJzIC0tPgogIDxsaW5lIHgxPSI3MCIgeTE9Ijc1IiB4Mj0iNjAiIHkyPSI5MCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEiLz4KICA8bGluZSB4MT0iNzAiIHkxPSI4MCIgeDI9IjYwIiB5Mj0iODAiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgPGxpbmUgeDE9IjEzMCIgeTE9Ijc1IiB4Mj0iMTYwIiB5Mj0iOSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEiLz4KICA8bGluZSB4MT0iMTMwIiB5MT0iODAiIHgyPSIxNjAiIHkyPSI4MCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEiLz4KPC9zdmc+" class="siggy-avatar cursor-pointer hover:scale-110 transition siggy-glow" 
+                <img src="assets/ritual.svg" class="ritual-logo-small" alt="Ritual"> <img src="assets/siggy.svg" class="siggy-avatar cursor-pointer hover:scale-110 transition siggy-glow" 
                      alt="Siggy" onclick="waveSiggy()" title="Click me!">
                 <h1 class="text-2xl font-bold">Ritual Number Rush</h1>
             </div>
@@ -124,7 +128,7 @@
                     
                     <!-- Siggy Companion -->
                     <div class="mt-6 pt-6 border-t border-gray-700 text-center">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+CiAgPHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNmZmYwMDAiLz4KICA8IS0tIENhdCBib3R0b20gKGMuY2hhcnQpIC0tPgogIDxoMSBmaWxsPSIjZmZmMDAwIi8+CiAgPGNpcmNsZSBjeD0iODAiIGN5PSI4MCIgcj0iNDAiIGZpbGw9IiMwMDAwMDAiLz4KICA8IS0tIEVhcnJ5IC0tPgogIDxwb2x5Z29uIHBvaW50cz0iNjUsMzUgNTUsMTAgODAsMzUiIGZpbGw9IiMwMDAwMDAiLz4KICA8cG9seWdvbiBwb2ludHM9IjEzNSwzNSAxNDUsMTAgMTIwLDM1IiBmaWxsPSIjMDAwMDAwIi8+CiAgPHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiB4PSI4MCIgeT0iMzAiIGZpbGw9IiJmYmYyNCIvPgogIDxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgeD0iMTIwIiB5PSIzMCIgZmlsbD0iI2ZiYjI0Ii8+CiAgPGNpcmNsZSBjeD0iMTAwIiBjeT0iNzUiIHI9IjUiIGZpbGw9IiMwMDAwMDAiLz4KICA8IS0tIE5vc2UgLS0+CiAgPHBhdGggZD0iTTkwIDgyIFEoMDAgOTAgMTAwIDgyIiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS13aWR0aD0iMiIgZmlsbD0ibm9uZSIvPgogIDwhLS0gU3VibWl0IG9uIGhlcmRfZm9yd2FyZCAoZ3JheSBzaW1wbGUgZGV2aWNlKSAtLT4KICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDAsMzUpIHNlY3RvLzguMCI+CiAgPHJlY3QgeD0iMTIuNSIgeT0iMTIuNSIgd2lkdGg9IjI1IiBoZWlnaHQ9IjI1IiBmaWxsPSIjOWNhM2FmIi8+CiAgPHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIGZpbGw9IiM5Y2EzYWYiLz4KICA8L2c+CiAgPCEtLSBHcmVlbiB0YW5rIG1hcmstLS0+CiAgPHBhdGggZD0iTTYwIDE0MCBRIDEwMCAxMzAgMTQwIDE0MCIgZmlsbD0iIzEwYjk4MSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8IS0tIEJsdWUgZWxlY3Ryb25pYyBqYWNrZXQgLS0+CiAgPHBhdGggZD0iTTM1IDEzMCBRIDMwIDE2MCA0MCAyMDAgTCAxMDAgMjAwIFEgMTI1IDE2MCAxMzUgMTMwIiBmaWxsPSIjM2I4MmY2IiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIwLjk1Ii8+CiAgPHBhdGggZD0iTTE1NSAxMzAgUSAxNzAgMTYwIDE2MCAyMDAgTCAxMzAgMjAwIFExMjUgMTYwIDEwNSAxMzAiIGZpbGw9IiMzYjgyZjYiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9IjAuOTUiLz4KICA8cGF0aCBkPSJNMTU1IDEzMCBRIDE1NSAxMzAgMTgwIDE4MCIgZmlsbD0iIzAwMCIvPgogIDxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSIxNSIgZmlsbD0iIzAwMCIgb3BhY2l0eT0iMC41Ii8+CiAgPCEtLSBQaW5rIHBhd3MgLS0+CiAgPGVsbGlwc2UgY3g9IjE0MCIgY3k9IjE4MCIgcng9IjEyIiByeT0iOCIgaGVpZ2h0PSI1IiBmaWxsPSIjZmJiZjI0IiBvcGFjaXR5PSIwLjgiLz4KICA8IS0tIFdoaXNrZXJzIC0tPgogIDxsaW5lIHgxPSI3MCIgeTE9Ijc1IiB4Mj0iNjAiIHkyPSI5MCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEiLz4KICA8bGluZSB4MT0iNzAiIHkxPSI4MCIgeDI9IjYwIiB5Mj0iODAiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgPGxpbmUgeDE9IjEzMCIgeTE9Ijc1IiB4Mj0iMTYwIiB5Mj0iOSIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEiLz4KICA8bGluZSB4MT0iMTMwIiB5MT0iODAiIHgyPSIxNjAiIHkyPSI4MCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjEiLz4KPC9zdmc+" class="siggy-sidebar" alt="Siggy mascot">
+                        <img src="assets/siggy.svg" class="siggy-sidebar" alt="Siggy mascot">
                         <p class="text-sm text-gray-400 mt-2">Siggy says: "Keep trying!"</p>
                     </div>
                 </div>
@@ -154,78 +158,78 @@
         const STORAGE_KEY = 'ritual_number_rush_leaderboard';
 
         // Utilities
-        function $(id) {{ return document.getElementById(id); }}
-        function show(id) {{ $(id).classList.remove('hidden'); }}
-        function hide(id) {{ $(id).classList.add('hidden'); }}
+        function $(id) { return document.getElementById(id); }
+        function show(id) { $(id).classList.remove('hidden'); }
+        function hide(id) { $(id).classList.add('hidden'); }
 
         // Leaderboard functions
-        function getLeaderboard() {{
+        function getLeaderboard() {
             return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        }}
+        }
 
-        function saveLeaderboard(lb) {{
+        function saveLeaderboard(lb) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(lb));
-        }}
+        }
 
-        function addScore(name, score, maxNumber, maxAttempts) {{
+        function addScore(name, score, maxNumber, maxAttempts) {
             const lb = getLeaderboard();
-            lb.push({{ name, score, maxNumber, maxAttempts, date: new Date().toISOString() }});
+            lb.push({ name, score, maxNumber, maxAttempts, date: new Date().toISOString() });
             lb.sort((a, b) => b.score - a.score || a.maxAttempts - b.maxAttempts);
             saveLeaderboard(lb.slice(0, 100));
-        }}
+        }
 
-        function renderLeaderboard(limit = 10) {{
+        function renderLeaderboard(limit = 10) {
             const lb = getLeaderboard().slice(0, limit);
             let html = '';
-            if (lb.length === 0) {{
+            if (lb.length === 0) {
                 html = '<p class="text-center text-gray-400 py-8">No scores yet. Be the first!</p>';
-            }} else {{
+            } else {
                 html = '<div class="space-y-2">';
-                lb.forEach((entry, i) => {{
+                lb.forEach((entry, i) => {
                     const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1) + '.';
-                    html += `<div class="flex justify-between items-center bg-gray-700/50 p-3 rounded-lg"><span class="font-semibold">{{medal}} {{entry.name}}</span><span class="text-yellow-400 font-bold">{{entry.score}} pts</span></div>`;
-                }});
+                    html += `<div class="flex justify-between items-center bg-gray-700/50 p-3 rounded-lg"><span class="font-semibold">{medal} {entry.name}</span><span class="text-yellow-400 font-bold">{entry.score} pts</span></div>`;
+                });
                 html += '</div>';
-            }}
+            }
             $('leaderboard-table').innerHTML = html;
             $('modal-leaderboard').innerHTML = html;
-        }}
+        }
 
-        function showLeaderboard() {{
+        function showLeaderboard() {
             renderLeaderboard();
             show('leaderboard-modal');
-        }}
+        }
 
-        function hideLeaderboard() {{
+        function hideLeaderboard() {
             hide('leaderboard-modal');
-        }}
+        }
 
         // Game logic
-        class GameSession {{
-            constructor(maxNumber, maxAttempts) {{
+        class GameSession {
+            constructor(maxNumber, maxAttempts) {
                 this.target = Math.floor(Math.random() * maxNumber) + 1;
                 this.attempts = 0;
                 this.maxAttempts = maxAttempts;
                 this.maxNumber = maxNumber;
                 this.guesses = [];
-            }}
+            }
 
-            guess(num) {{
+            guess(num) {
                 this.attempts++;
                 this.guesses.push(num);
-                if (num === this.target) {{
+                if (num === this.target) {
                     const score = Math.max(0, 100 - (this.attempts * 10));
-                    return {{ result: 'correct', score, gameOver: true }};
-                }} else if (this.attempts >= this.maxAttempts) {{
-                    return {{ result: 'fail', score: 0, gameOver: true }};
-                }} else {{
-                    return {{ result: num < this.target ? 'higher' : 'lower', gameOver: false }};
-                }}
-            }}
-        }}
+                    return { result: 'correct', score, gameOver: true };
+                } else if (this.attempts >= this.maxAttempts) {
+                    return { result: 'fail', score: 0, gameOver: true };
+                } else {
+                    return { result: num < this.target ? 'higher' : 'lower', gameOver: false };
+                }
+            }
+        }
 
         // Event handlers
-        function startGame(event) {{
+        function startGame(event) {
             event.preventDefault();
             const maxNum = parseInt($('max-number').value);
             const maxAtt = parseInt($('max-attempts').value);
@@ -236,26 +240,26 @@
             show('game-panel');
 
             $('range-display').textContent = maxNum;
-            $('attempts-counter').textContent = `0/${{maxAtt}}`;
+            $('attempts-counter').textContent = `0/${maxAtt}`;
             $('guess-input').max = maxNum;
             $('guess-input').value = '';
             $('game-message').textContent = '';
             hide('guess-history');
             $('history-bubbles').innerHTML = '';
-        }}
+        }
 
-        function makeGuess(event) {{
+        function makeGuess(event) {
             event.preventDefault();
             if (!currentGame) return;
 
             const guess = parseInt($('guess-input').value);
-            if (isNaN(guess) || guess < 1 || guess > currentGame.maxNumber) {{
-                alert(`Enter a number between 1 and ${{currentGame.maxNumber}}`);
+            if (isNaN(guess) || guess < 1 || guess > currentGame.maxNumber) {
+                alert(`Enter a number between 1 and ${currentGame.maxNumber}`);
                 return;
-            }}
+            }
 
             const result = currentGame.guess(guess);
-            $('attempts-counter').textContent = `${{currentGame.attempts}}/${{currentGame.maxAttempts}}`;
+            $('attempts-counter').textContent = `${currentGame.attempts}/${currentGame.maxAttempts}`;
 
             // Add to history bubble
             const bubble = document.createElement('span');
@@ -266,36 +270,36 @@
             $('history-bubbles').appendChild(bubble);
             show('guess-history');
 
-            if (result.gameOver) {{
-                if (result.result === 'correct') {{
+            if (result.gameOver) {
+                if (result.result === 'correct') {
                     $('game-message').innerHTML = '<span class="text-green-400 text-xl">Correct! The number was ' + currentGame.target + '</span>';
                     hide('game-panel');
                     show('score-panel');
-                }} else {{
+                } else {
                     $('game-message').innerHTML = '<span class="text-red-400 text-xl">Game Over! The number was ' + currentGame.target + '</span>';
                     showLoseNotification(currentGame.target);
-                }}
+                }
                 $('final-score').textContent = result.score;
 
-                if (result.score > 0) {{
-                    setTimeout(() => {{ hide('game-panel'); show('score-panel'); }}, 1500);
-                }} else {{
-                    setTimeout(() => {{ hide('game-panel'); show('setup-panel'); currentGame = null; }}, 3000);
-                }}
-            }} else {{
+                if (result.score > 0) {
+                    setTimeout(() => { hide('game-panel'); show('score-panel'); }, 1500);
+                } else {
+                    setTimeout(() => { hide('game-panel'); show('setup-panel'); currentGame = null; }, 3000);
+                }
+            } else {
                 const color = result.result === 'higher' ? 'blue' : 'red';
                 const icon = result.result === 'higher' ? 'Higher!' : 'Lower!';
-                $('game-message').innerHTML = `<span class="text-${{color}}-400 text-lg">${{icon}}</span>`;
-            }}
+                $('game-message').innerHTML = `<span class="text-${color}-400 text-lg">${icon}</span>`;
+            }
             $('guess-input').value = '';
-        }}
+        }
 
-        function saveScore() {{
+        function saveScore() {
             const name = $('player-name').value.trim();
-            if (!name) {{
+            if (!name) {
                 alert('Please enter your name');
                 return;
-            }}
+            }
             const score = parseInt($('final-score').textContent);
             const maxNum = parseInt($('max-number').value);
             const maxAtt = parseInt($('max-attempts').value);
@@ -305,37 +309,37 @@
             show('setup-panel');
             currentGame = null;
             renderLeaderboard();
-        }}
+        }
 
-        function shareScore() {{
+        function shareScore() {
             const score = $('final-score').textContent;
-            const text = `I scored ${{score}} points in Ritual Number Rush! Can you beat me?`;
+            const text = `I scored ${score} points in Ritual Number Rush! Can you beat me?`;
             window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text), '_blank');
-        }}
+        }
 
         // Siggy animations
-        function waveSiggy() {{
+        function waveSiggy() {
             const img = document.querySelector('.siggy-avatar');
             img.classList.add('siggy-wave');
             setTimeout(() => img.classList.remove('siggy-wave'), 1000);
-        }}
+        }
 
         // Lose notification
-        function showLoseNotification(targetNumber) {{
+        function showLoseNotification(targetNumber) {
             $('lose-number').textContent = targetNumber;
             show('siggy-notification');
-        }}
+        }
 
-        function closeLoseNotification() {{
+        function closeLoseNotification() {
             hide('siggy-notification');
-        }}
+        }
 
         // Close modal on outside click
-        document.addEventListener('DOMContentLoaded', () => {{
+        document.addEventListener('DOMContentLoaded', () => {
             renderLeaderboard();
-            document.getElementById('leaderboard-modal').addEventListener('click', (e) => {{
+            document.getElementById('leaderboard-modal').addEventListener('click', (e) => {
                 if (e.target.id === 'leaderboard-modal') hideLeaderboard();
-            }});
-        }});
+            });
+        });
     </script>
 </body></html>
